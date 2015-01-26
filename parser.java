@@ -1,11 +1,23 @@
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
 
 public class parser {
 	private String fileName;
+	private boolean isValidFile;
 
 	public parser(String fileName){
 		this.fileName = fileName;
+		try {
+			RandomAccessFile raf = new RandomAccessFile(fileName, "r");
+
+			raf.close();	
+			}
+	catch(IOException e) {
+		isValidFile = false;
+	}
+		isValidFile = true;
 	}
 	
 	public void setFileName(String fileName){
@@ -16,7 +28,11 @@ public class parser {
 		return this.fileName;
 	}
 	
-	private int isBeginningOfLine(long offset){ //returns 1 if beginning of line, 0 if not beginning of line, -1 if negative offset
+	public boolean isValidFile(){
+		return isValidFile;
+	}
+	
+	public int isBeginningOfLine(long offset){ //returns 1 if beginning of line, 0 if not beginning of line, -1 if negative offset
 		int isBeginning = 0;
 		try {
 				RandomAccessFile raf = new RandomAccessFile(fileName, "r");
@@ -41,7 +57,7 @@ public class parser {
 		return isBeginning;
 	}
 	
-	public String seekLine(int offset){
+	public String seekLine(long offset){
 		String line;
 		try {
 			RandomAccessFile raf = new RandomAccessFile(fileName, "r");
@@ -69,7 +85,7 @@ public class parser {
 		return line;
 	}
 	
-	public String getLine(int offset){
+	public String getLine(long offset){
 		String line = null;
 		String testLine = null;
 		try {
@@ -89,11 +105,29 @@ public class parser {
 				line = "Offset not valid";
 			//System.out.println(line);
 		} catch(IOException e) {
-			System.out.print("IOException: getLine");
+			//System.out.print("IOException: getLine");
 		}
 		
 		return line;
 	}
+	
+	public List<Long> findOffsets()
+	{
+		List<Long> offsetList = new ArrayList<Long>();
+		try {
+			RandomAccessFile raf = new RandomAccessFile(fileName, "r");
+			while(raf.readLine() != null){
+				offsetList.add(raf.getFilePointer());
+			}
+			
+			offsetList.remove(offsetList.size()-1);
+			raf.close();
+		}
+		catch(IOException e) {
+		}
+		
+		return(offsetList);
 
+	}
 }
 
