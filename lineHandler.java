@@ -3,7 +3,13 @@ public class lineHandler {
 		private int fid, stateNumCode, countyNumCode, featureElevationMeters, featureElevationFeet;
 		private String featureName, featureClass, stateAlphaCode, countyName, primaryLatitudeDMS, primaryLongitudeDMS, sourceLatitudeDMS, sourceLongitudeDMS, mapName, dateCreated, dateEdited;
 		private float primaryLatitudeDeg, primaryLongitudeDeg, sourceLatitudeDeg, sourceLongitudeDeg;
+		
 		public lineHandler(String line){
+			setLineHandler(line);
+		}
+		
+		public void setLineHandler(String line){
+		try{
 			String[] splitArray = line.split("\\|");
 			fid = Integer.parseInt(splitArray[0]);
 			featureName = splitArray[1];
@@ -28,9 +34,16 @@ public class lineHandler {
 				dateEdited = splitArray[19];
 			else
 				dateEdited = null;
+			}
+		catch(java.lang.NumberFormatException e){
+			
+		}
 			
 		}
 		
+		public int getFid(){
+			return fid;
+		}
 		public void lineHandlerPrint()
 		{
 			System.out.println(fid + " "+ featureName + " " + dateCreated);
