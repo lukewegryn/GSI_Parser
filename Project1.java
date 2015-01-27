@@ -12,17 +12,18 @@ public class Project1 {
 			offsetList = myParser.findOffsets();
 			//System.out.print(myParser.seekLine(265));
 			myLineHandler = new lineHandler(myParser.seekLine(offsetList.get(0)));
-			System.out.println(offsetList.get(0) + "\t" + myLineHandler.getFid());
+			lineWriter lw = new lineWriter();
+			lw.writeLineToFile(("\t" + offsetList.get(0) + "\t" + myLineHandler.getFid()));
 			for(int i = 1; i < offsetList.size(); i++)
 			{
 				myLineHandler.setLineHandler(myParser.seekLine(offsetList.get(i)));
-				System.out.println(offsetList.get(i) + "\t" + myLineHandler.getFid());
+				lw.writeLineToFile(("\t" + offsetList.get(i) + "\t" + myLineHandler.getFid()));
 				
 			}
 		}
-		if(myParser.isBeginningOfLine(offset) == 1){
+		/*if(myParser.isBeginningOfLine(offset) == 1){
 			myLineHandler = new lineHandler(myParser.seekLine(offset));
 			//myLineHandler.lineHandlerPrint();
-		}
+		}*/
 	}
 }
