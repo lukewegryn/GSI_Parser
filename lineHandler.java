@@ -1,4 +1,3 @@
-
 public class lineHandler {
 		private int fid, stateNumCode, countyNumCode, featureElevationMeters, featureElevationFeet;
 		private String featureName, featureClass, stateAlphaCode, countyName, primaryLatitudeDMS, primaryLongitudeDMS, sourceLatitudeDMS, sourceLongitudeDMS, mapName, dateCreated, dateEdited;
@@ -44,8 +43,58 @@ public class lineHandler {
 		public int getFid(){
 			return fid;
 		}
+		
 		public void lineHandlerPrint()
 		{
 			System.out.println(fid + " "+ featureName + " " + dateCreated);
+		}
+		
+		public String commandResult(String command){
+			String result = null;
+			if(command.equals("show_name")){
+				return featureName;
+			}
+			else if(command.equals("show_latitude")){
+				return splitLatitude(primaryLatitudeDMS);
+			}
+			
+			else if(command.equals("show_longitude")){
+				return splitLongitude(primaryLongitudeDMS);
+			}
+			
+			else if(command.equals("show_elevation")){
+				return Integer.toString(featureElevationFeet);
+			}
+			
+			else if(command.equals("quit")){
+				return "quit";
+			}
+			return result;
+		}
+		
+		private String splitLatitude(String latitude){
+			String direction;
+			if(latitude.charAt(6) == 'N'){
+				direction = "North";
+			}
+			
+			else
+				direction = "South";
+			
+			String result = (Integer.parseInt(latitude.substring(0, 2)) + "d " + Integer.parseInt(latitude.substring(2,4)) + "m " + Integer.parseInt(latitude.substring(4, 6)) + "s " + direction);
+			return result;
+		}
+		
+		private String splitLongitude(String latitude){
+			String direction;
+			if(latitude.charAt(7) == 'W'){
+				direction = "West";
+			}
+			
+			else
+				direction = "East";
+			
+			String result = (Integer.parseInt(latitude.substring(0, 3)) + "d " + Integer.parseInt(latitude.substring(3,5)) + "m " + Integer.parseInt(latitude.substring(5, 7)) + "s " + direction);
+			return result;
 		}
 }

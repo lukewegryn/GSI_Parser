@@ -20,10 +20,44 @@ public class Project1 {
 				lw.writeLineToFile(("\t" + offsetList.get(i) + "\t" + myLineHandler.getFid()));
 				
 			}
-		}
-		/*if(myParser.isBeginningOfLine(offset) == 1){
-			myLineHandler = new lineHandler(myParser.seekLine(offset));
-			//myLineHandler.lineHandlerPrint();
-		}*/
+			lw.writeLineToFile("\r\n");
+			
+			long lastOffset = offsetList.get(offsetList.size()-1);
+			commandParser cp = new commandParser(args[1]);
+			String[] currentCommand = {null, null};
+			boolean quit = false;
+			while(!quit){
+				currentCommand = cp.parseNext();
+				if(currentCommand[0] == "quit"){
+					quit = true;
+				}
+				
+				else if(currentCommand[0] != null){
+					
+					lw.writeCommandToFile(currentCommand[0] + "\t" + currentCommand[1]);
+					
+					long commandOffset = Integer.parseInt(currentCommand[1]);
+					if( commandOffset > lastOffset){
+						lw.writeResultToFile("Offset too large");
+					}
+					
+					else if(commandOffset < 0){
+						lw.writeResultToFile("Offset is not positive");
+					}
+					
+					else if(myParser.isBeginningOfLine(commandOffset) != 1){
+						lw.writeResultToFile("Unaligned offset");
+					}
+					
+					else if(myParser.isBeginningOfLine(commandOffset) == 1){
+						myLineHandler.setLineHandler(myParser.seekLine(commandOffset));
+						lw.writeResultToFile(myLineHandler.commandResult(currentCommand[0]));
+					}
+				}
+			}
+
+			}
+			
+		
 	}
 }
